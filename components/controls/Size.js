@@ -13,6 +13,7 @@ export default function (context) {
     }
 
     return {
-        update
+        update,
+        size
     }
 }

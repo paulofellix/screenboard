@@ -5,18 +5,30 @@ import Cursor from './Cursor.js'
 
 export default function(context) {
 
-    const controls = [
-        Size(context),
-        Tools(context),
-        Color(context),
-        Cursor(context)
-    ]
+    const size = Size(context)
+    const tools = Tools(context)
+    const color = Color(context)
+    const cursor = Cursor(context);
+
+    // const controls = [
+    //     Size(context),
+    //     Tools(context),
+    //     Color(context),
+    //     Cursor(context)
+    // ]
 
     function updateAll() {
-        controls.forEach( control => control.update())
+        size.update();
+        tools.update();
+        color.update();
+        cursor.update();
     }
     
     return {
-        updateAll
+        updateAll,
+        size,
+        tools,
+        color,
+        cursor
     }
 }

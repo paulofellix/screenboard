@@ -1,14 +1,23 @@
 {
   "name": "screenboard",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "👨🏾‍🏫 It's a overlay blackboard on your screen",
   "main": "app.js",
   "scripts": {
-    "start": "electron app.js"
+    "start": "electron app.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "screenboard",
+    "linux": {
+      "target": "deb",
+      "executableName": "screenboard"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maykbrito/screenboard.git"
+    "url": "git+https://github.com/paulofellix/screenboard.git"
   },
   "keywords": [
     "screen",
@@ -19,13 +28,17 @@
     "canvas",
     "electron"
   ],
-  "author": "Mayk Brito",
+  "author": {
+    "name": "Paulo Félix",
+    "email": "paulofellix@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/maykbrito/screenboard/issues"
+    "url": "https://github.com/paulofellix/screenboard/issues"
   },
-  "homepage": "https://github.com/maykbrito/screenboard#readme",
+  "homepage": "https://github.com/paulofellix/screenboard#readme",
   "devDependencies": {
-    "electron": "^8.2.5"
+    "electron": "^8.2.5",
+    "electron-builder": "^22.8.1"
   }
 }

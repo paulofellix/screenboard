@@ -31,6 +31,7 @@ export default function Cursor (context) {
 
     function setCursor(cursorType) {
         selectedCursorType = cursorTypes[cursorType]
+        cursor.name = cursorType
     }
 
 
@@ -51,6 +52,8 @@ export default function Cursor (context) {
     }
 
     return {
-        update
+        update,
+        setCursor,
+        cursor
     }
 }

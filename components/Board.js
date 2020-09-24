@@ -2,6 +2,9 @@ import Controls from "./controls/index.js"
 
 export function Board (canvas) {
 
+    let history = [];
+    let controlKey = 0;
+
     // Working inside canvas, but it's a 2d or 3d context?
     const context = canvas.getContext('2d')
 
@@ -49,10 +52,29 @@ export function Board (canvas) {
 
     // When put pen on board and press to draw
     function startPressPen(event) {
-        isDrawning = true
+        if (event.button === 0){
+            controlKey++;
 
-        // start draw here, go make some dots
-        draw(event)
+            isDrawning = true
+    
+            // start draw here, go make some dots
+            draw(event)
+        }else{
+            history
+                .filter(k => k.controlKey === controlKey)
+                .forEach(k => {
+                    context.lineWidth++
+                    context.globalCompositeOperation = "destination-out"
+                    context.lineTo(k.x, k.y)
+                    context.stroke()
+                    context.beginPath()
+                    context.moveTo(k.x, k.y)
+                })
+            
+            history = history.filter(k => k.controlKey !== controlKey)
+            controlKey--
+            context.lineWidth--
+        }
     }
 
     // When get out pen of board and stop
@@ -79,9 +101,16 @@ export function Board (canvas) {
         context.lineCap = 'round'
 
 
-
         // drawning the line geting mouse position
-        context.lineTo(event.clientX, event.clientY)
+        const [pointX, pointY] = [event.clientX, event.clientY]
+        if (controls.cursor.cursor.name === 'pencil'){
+            history.push({
+                controlKey: controlKey,
+                x: pointX,
+                y: pointY
+            })
+        }
+        context.lineTo(pointX, pointY)
         context.stroke() // visualize the line
 
         // I need to start small circle and update his position
