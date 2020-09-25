@@ -86,7 +86,7 @@ export function Board (canvas) {
             history
                 .filter(k => k.controlKey === controlKey)
                 .forEach(k => {
-                    context.lineWidth = k.lineWidth + 1
+                    context.lineWidth = k.lineWidth + 2
                     context.globalCompositeOperation = "destination-out"
                     context.lineTo(k.x, k.y)
                     context.stroke()

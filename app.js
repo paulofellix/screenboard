@@ -1,15 +1,31 @@
 const { app, BrowserWindow, screen, globalShortcut } = require('electron')
 const shortcuts = require('./shortcuts')
+const { getCursorScreenPoint, getDisplayNearestPoint } = screen
 
 let win = null
 app.allowRendererProcessReuse = true
 
 function createWindow () {
-    const mainScreen = screen.getPrimaryDisplay();
-    const dimensions = mainScreen.size;
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const activeScreen = getDisplayNearestPoint(getCursorScreenPoint());
+  const dimensions = activeScreen.size;
+
+  const displays = screen.getAllDisplays()
+  const externalDisplay = displays.find((display) => {
+    return display.bounds.x !== 0 || display.bounds.y !== 0
+  })
+
+  let winObj = {}
+
+  if (externalDisplay && externalDisplay.id === activeScreen.id){
+   winObj = {
+    x: primaryDisplay.bounds.width + 50,
+    y: primaryDisplay.bounds.height + 50
+   }
+  }
 
   // Create the browser window.
-  win = new BrowserWindow({
+  win = new BrowserWindow(Object.assign({
     width: dimensions.width,
     height: dimensions.height,
     transparent: true,
@@ -18,7 +34,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
     },
-  })
+  }, winObj))
 
   // and load the index.html of the app.
   win.loadFile('index.html')
