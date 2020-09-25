@@ -12,8 +12,17 @@ export default function (context) {
         context.lineWidth = size
     }
 
+    function increaseSize(){
+        size++
+    }
+
+    function decreaseSize(){
+        size--
+    }
+
     return {
         update,
-        size
+        increaseSize,
+        decreaseSize
     }
 }

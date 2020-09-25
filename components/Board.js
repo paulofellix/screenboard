@@ -15,7 +15,26 @@ export function Board (canvas) {
     const controls = new Controls(context)
 
     // clear the canvas
-    canvas.addEventListener('wheel', clearCanvas);
+    canvas.addEventListener('wheel', resizePencil);
+    
+    function resizePencil(event) {
+        if (event.ctrlKey){
+            const size = document.querySelector('#size')
+
+            if (event.wheelDelta > 0){
+                if (size.value < 30) {
+                    controls.size.increaseSize()
+                    size.value++
+                }
+            }else{
+                if (size.value > 0) {
+                    controls.size.decreaseSize()
+                    size.value--
+                }
+            }
+            controls.updateAll()
+        }
+    }
 
     function clearCanvas() { 
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -59,11 +78,15 @@ export function Board (canvas) {
     
             // start draw here, go make some dots
             draw(event)
-        }else{
+        }else if (event.button === 1){
+            clearCanvas()
+        }else if (event.button === 2){
+            const lineWidth = context.lineWidth
+
             history
                 .filter(k => k.controlKey === controlKey)
                 .forEach(k => {
-                    context.lineWidth++
+                    context.lineWidth = k.lineWidth + 1
                     context.globalCompositeOperation = "destination-out"
                     context.lineTo(k.x, k.y)
                     context.stroke()
@@ -73,7 +96,7 @@ export function Board (canvas) {
             
             history = history.filter(k => k.controlKey !== controlKey)
             controlKey--
-            context.lineWidth--
+            context.lineWidth = lineWidth
         }
     }
 
@@ -106,6 +129,7 @@ export function Board (canvas) {
         if (controls.cursor.cursor.name === 'pencil'){
             history.push({
                 controlKey: controlKey,
+                lineWidth: context.lineWidth,
                 x: pointX,
                 y: pointY
             })

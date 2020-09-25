@@ -1,6 +1,6 @@
 {
   "name": "screenboard",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "👨🏾‍🏫 It's a overlay blackboard on your screen",
   "main": "app.js",
   "scripts": {
