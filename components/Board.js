@@ -27,7 +27,7 @@ export function Board (canvas) {
                     size.value++
                 }
             }else{
-                if (size.value > 0) {
+                if (size.value > 1) {
                     controls.size.decreaseSize()
                     size.value--
                 }
@@ -81,23 +81,27 @@ export function Board (canvas) {
         }else if (event.button === 1){
             clearCanvas()
         }else if (event.button === 2){
-            const lineWidth = context.lineWidth
-
-            history
-                .filter(k => k.controlKey === controlKey)
-                .forEach(k => {
-                    context.lineWidth = k.lineWidth + 2
-                    context.globalCompositeOperation = "destination-out"
-                    context.lineTo(k.x, k.y)
-                    context.stroke()
-                    context.beginPath()
-                    context.moveTo(k.x, k.y)
-                })
-            
-            history = history.filter(k => k.controlKey !== controlKey)
-            controlKey--
-            context.lineWidth = lineWidth
+            undoDraw()
         }
+    }
+
+    function undoDraw() {
+        const lineWidth = context.lineWidth
+
+        history
+            .filter(k => k.controlKey === controlKey)
+            .forEach(k => {
+                context.lineWidth = k.lineWidth + 2
+                context.globalCompositeOperation = "destination-out"
+                context.lineTo(k.x, k.y)
+                context.stroke()
+                context.beginPath()
+                context.moveTo(k.x, k.y)
+            })
+        
+        history = history.filter(k => k.controlKey !== controlKey)
+        controlKey--
+        context.lineWidth = lineWidth
     }
 
     // When get out pen of board and stop
@@ -128,6 +132,7 @@ export function Board (canvas) {
         const [pointX, pointY] = [event.clientX, event.clientY]
         if (controls.cursor.cursor.name === 'pencil'){
             history.push({
+                id: history.length + 1,
                 controlKey: controlKey,
                 lineWidth: context.lineWidth,
                 x: pointX,
